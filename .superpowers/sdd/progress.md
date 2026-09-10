@@ -47,23 +47,39 @@
 
 ## Task 3: Implement Current-Weather Provider Client
 
-**Status:** PENDING
-**Report:** task-3-report.md (pending)
-**Commits:** pending
+**Status:** DONE
+**Report:** task-3-report.md
+**Commits:** `df8f966` - Task 3: Implement Current-Weather Provider Client
 
-### Implementation:
-- Will dispatch after Task 2 review completes
+### Completed Steps:
+1. Created WeatherClient interface with `current(double, double): Mono<ProviderCurrentWeather>`
+2. Created OpenMeteoWeatherClient with WebClient and proper timeout handling
+3. Created OpenMeteoWeatherClientTest with 7 tests (100% pass rate)
+4. Supports metric units and ISO-8601 datetime parsing
+5. Handles provider failures, malformed payloads, and timeouts
+
+### Verification:
+- Tests: 7/7 passing (100%)
+- Build: SUCCESS
 
 ---
 
 ## Task 4: Add Reactive Weather Orchestration
 
-**Status:** PENDING
-**Report:** task-4-report.md (pending)
-**Commits:** pending
+**Status:** DONE
+**Report:** task-4-report.md
+**Commits:** `f666945` - Task 4: Add reactive weather orchestration
 
-### Implementation:
-- Will dispatch after Task 3 review completes
+### Completed Steps:
+1. Created CurrentWeatherService with `getWeather(LocationRequest): Mono<CurrentWeatherResponse>`
+2. Handles LocationRequest.City (triggers geocoding first) and LocationRequest.Coordinates (direct lookup)
+3. Created CurrentWeatherServiceTest with 2 tests verifying orchestration logic
+4. All tests pass (2/2, 100% pass rate)
+
+### Verification:
+- Tests: 2/2 passing (100%)
+- Build: SUCCESS
+- No blocking calls in production code
 
 ---
 
