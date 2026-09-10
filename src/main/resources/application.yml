@@ -18,3 +18,10 @@ info:
   app:
     name: ${spring.application.name}
     description: Spring Boot web-service foundation
+
+weather:
+  open-meteo:
+    geocoding-base-url: https://geocoding-api.open-meteo.com
+    forecast-base-url: https://api.open-meteo.com
+    connect-timeout: 2s
+    response-timeout: 5s
