@@ -98,7 +98,7 @@ The repository will contain:
 - `pom.xml`
 - Maven Wrapper scripts and wrapper configuration
 - Application source and test source
-- `application.properties` or `application.yml`
+- `application.yml`
 - `.gitignore`
 - `.dockerignore`
 - `Dockerfile`
@@ -135,14 +135,16 @@ builder stage packages with tests skipped to avoid running the same suite twice.
 
 - Image name `ghcr.io/ipa-big/openclaw-test-service`
 - Local build context pointing at the repository root
-- An overridable image tag, defaulting to `latest`
+- Image reference
+  `ghcr.io/ipa-big/openclaw-test-service:${IMAGE_TAG:-latest}`
 - Host-to-container port mapping `8080:8080`
 - The same Actuator-based health check as the image
-- A restart policy suitable for local service execution
+- Restart policy `unless-stopped`
 
 Running `docker compose up --build` builds and starts the local source. The
-image/tag setting can be overridden to run a published GHCR version instead.
-No external services or Docker volumes are required.
+published image can be selected with `IMAGE_TAG=<tag> docker compose pull`
+followed by `IMAGE_TAG=<tag> docker compose up --no-build`. No external
+services or Docker volumes are required.
 
 ## Request and Failure Flow
 
@@ -187,7 +189,7 @@ A single workflow runs for:
 
 - Pull requests
 - Pushes to `main`
-- Version tags
+- Version tags matching `v*`
 
 Every run:
 
@@ -200,8 +202,8 @@ Every run:
 Pull requests build but do not publish the image. Pushes to `main` and version
 tags authenticate to GHCR with the workflow `GITHUB_TOKEN` and publish:
 
-- `main`: `latest` and a commit-SHA tag
-- Version tag: the original Git tag and a commit-SHA tag
+- `main`: `latest` and `sha-<short-commit-sha>`
+- Version tag: the original Git tag and `sha-<short-commit-sha>`
 
 The image repository is:
 
@@ -239,6 +241,7 @@ The design is satisfied when:
 - The Docker image builds, runs as a non-root user, and becomes healthy.
 - `docker compose up --build` starts a healthy service on host port `8080`.
 - Pull requests verify Maven and Docker builds without publishing.
-- Pushes to `main` and version tags publish the specified tags to GHCR.
+- Pushes to `main` and Git tags matching `v*` publish the specified tags to
+  GHCR.
 - Maven build output and common local artifacts are excluded from version
   history.
