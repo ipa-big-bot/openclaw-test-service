@@ -92,8 +92,6 @@ failsafe-reports/
 
 # Superpowers (generated files)
 .superpowers/
-docs/superpowers/specs/
-docs/superpowers/plans/
 .copilot/
 
 # Lombok
