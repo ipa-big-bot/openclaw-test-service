@@ -4,11 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@SpringBootTest
-@Import(TestWebClientConfiguration.class)
+@SpringBootTest(classes = OpenclawTestServiceApplication.class)
 class OpenclawTestServiceApplicationTests {
 
     @Test
@@ -20,7 +18,7 @@ class OpenclawTestServiceApplicationTests {
 class TestWebClientConfiguration {
 
     @Bean
-    public WebClient.Builder testWebClientBuilder() {
+    public WebClient.Builder webClientBuilder() {
         return WebClient.builder();
     }
 }

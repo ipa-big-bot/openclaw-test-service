@@ -35,16 +35,6 @@ class OpenApiEndpointIT {
                 .contains("\"title\":\"OpenClaw Test Service API\"")
                 .contains("\"version\":\"v1\"");
 
-        assertThat(response.body()).doesNotContain("/api/v1/weather/current");
-    }
-
-    @Test
-    void openApiDocumentContainsWeatherEndpointDocumentation()
-            throws IOException, InterruptedException {
-        HttpResponse<String> response = get("/v3/api-docs");
-
-        assertThat(response.statusCode()).isEqualTo(200);
-
         JsonNode json = objectMapper.readTree(response.body());
         JsonNode paths = json.get("paths");
 
@@ -52,7 +42,16 @@ class OpenApiEndpointIT {
         assertThat(paths.has("/api/v1/weather/current")).isTrue();
     }
 
-    private HttpResponse<String> get(String path) throws IOException, InterruptedException {
+    @Test
+    void swaggerUiIsAccessible() throws IOException, InterruptedException {
+        HttpResponse<String> response = get("/swagger-ui/index.html");
+
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.body()).containsIgnoringCase("swagger");
+    }
+
+    private HttpResponse<String> get(String path)
+            throws IOException, InterruptedException {
         URI uri = URI.create("http://localhost:" + port + path);
         HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
         return httpClient.send(request, HttpResponse.BodyHandlers.ofString());

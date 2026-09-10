@@ -9,7 +9,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,9 +22,8 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import(CurrentWeatherEndpointIT.WebFluxTestConfiguration.class)
-class CurrentWeatherEndpointIT {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = de.fraunhofer.ipa.openclawtestservice.OpenclawTestServiceApplication.class)
+public class CurrentWeatherEndpointIT {
 
     private static final MockWebServer GEOCODING = new MockWebServer();
     private static final MockWebServer FORECAST = new MockWebServer();
@@ -130,7 +128,7 @@ class CurrentWeatherEndpointIT {
                 .uri(URI.create("http://localhost:" + port + path))
                 .GET()
                 .build();
-        return httpClient.send(request, BodyHandlers.ofString());
+        return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     private MockResponse json(String body) {
