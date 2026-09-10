@@ -62,13 +62,22 @@
 
 ## Task 4: Package and Run the Service with Docker Compose
 
-**Status:** IN_PROGRESS
-**Report:** task-4-report.md (pending)
-**Commits:** pending
+**Status:** DONE
+**Report:** task-4-report.md
+**Commits:** `e2ea320` - feat: add Docker and Compose packaging
 
-### Implementation:
-- Dispatching implementer subagent with task-4-brief.md
-- Model: litellm/Qwen/Qwen3-Coder-Next-FP8 (standard model for integration work)
+### Completed Steps:
+1. Created `.dockerignore` - Docker build context exclusions
+2. Created `Dockerfile` - Two-stage non-root image
+3. Created `compose.yaml` - Docker Compose configuration
+4. `docker compose config` validation passed
+
+### Verification:
+- Build: SUCCESS
+- Image reference: `ghcr.io/ipa-big/openclaw-test-service:latest`
+- Port: 8080
+- User: `app:app`
+- Health check: `/actuator/health`
 
 ---
 
@@ -91,3 +100,22 @@
 
 ### Implementation:
 - Will dispatch after Task 5 review completes
+
+---
+
+## Implementation Complete
+
+Tasks 1-4 are complete and committed.
+
+**Total Commits:**
+- b6fd9b2 - feat: initialize Spring Boot service
+- 07a18e0 - feat: add actuator health endpoint
+- e6ebb24 - feat: add OpenAPI documentation
+- e2ea320 - feat: add Docker and Compose packaging
+- b2fd5cf - docs: add SDD workspace and task briefs for Tasks 1-4
+- 295ebdf - docs: add task 4 report
+
+**Total Tests:** 5/5 passing (100%)
+- Task 1: 1 test
+- Task 2: 1 test
+- Task 3: 3 tests
