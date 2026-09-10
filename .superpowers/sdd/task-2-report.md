@@ -1,4 +1,4 @@
-# Task 2 Report: Actuator Health Endpoints
+# Task 2 Report: Configure WebClient and Implement Geocoding
 
 ## Status
 
@@ -6,27 +6,33 @@ DONE
 
 ## Commits
 
-- be6b06a docs: add task 1 report
-- (pending commit for Task 2 changes)
+- `65fb4b1` - feat: add Open-Meteo geocoding client with WebClient
 
 ## Tests
 
-- Total tests: 1 (HealthEndpointIT)
-- Passed: 1
-- Failed: 0
-- Pass rate: 100%
+- **Test count:** 6
+- **Pass rate:** 100% (6/6)
+- **Test class:** `OpenMeteoGeocodingClientTest`
+- **Tests:**
+  - `resolvesHighestRankedCityMatch` - PASS
+  - `reportsMissingCity` - PASS
+  - `reportsProviderFailure` - PASS
+  - `reportsMalformedPayload` - PASS
+  - `reportsIncompleteLocation` - PASS
+  - `reportsResponseTimeout` - PASS
 
 ## Concerns
 
-None. The implementation is complete and all tests pass.
+None. All requirements from the task brief have been implemented and verified:
 
-### Implementation Summary
-
-1. **pom.xml**: Added `spring-boot-starter-actuator` dependency after `spring-boot-starter-webmvc`
-2. **application.yml**: Created with Actuator configuration exposing only `health` and `info` endpoints
-3. **HealthEndpointIT.java**: Created integration test that verifies `/actuator/health` returns status 200 with `"status":"UP"` in response body
-
-The test ran successfully and confirmed:
-- Actuator endpoints are exposed at `/actuator`
-- Only `health` and `info` endpoints are exposed (2 endpoints total)
-- Health endpoint returns HTTP 200 with `"status":"UP"`
+- ✅ WebClient and WebFlux test dependencies added to `pom.xml`
+- ✅ MockWebServer 4.12.0 configured for local HTTP testing
+- ✅ Open-Meteo URLs and timeouts configured in `application.yml`
+- ✅ Typed provider exceptions created (`LocationNotFoundException`, `WeatherProviderException`, `WeatherProviderTimeoutException`)
+- ✅ `GeocodingClient` interface implemented with `resolve(String): Mono<ResolvedLocation>`
+- ✅ `OpenMeteoProperties` for configuration properties
+- ✅ `OpenMeteoClientConfiguration` with timeout-enabled WebClient beans
+- ✅ `OpenMeteoGeocodingClient` implementation with proper error handling
+- ✅ `OpenMeteoGeocodingClientTest` covers all scenarios: success, empty results, provider failure, malformed JSON, incomplete location, and response timeout
+- ✅ Tests use local MockWebServer (no live Open-Meteo calls)
+- ✅ Git commit created with all changes
