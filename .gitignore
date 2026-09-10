@@ -1,0 +1,123 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+gradle-app.setting
+!gradle-wrapper.properties
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+.apt_generated/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Eclipse
+.settings/
+.project
+.classpath
+.factorypath
+.springBeans
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Spring Boot
+application*.yml
+application*.yaml
+application*.properties
+spring-configuration-metadata.json
+.spring-boot/
+
+# Docker
+.env
+.env.*
+*.env
+!.env.example
+.docker/
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs_vista.db
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# Logs
+*.log
+logs/
+
+# Testing
+test-output/
+test-results/
+junit-platform.properties
+coverage/
+.jacoco/
+jacoco.exec
+jacoco.csv
+surefire-reports/
+failsafe-reports/
+
+# Superpowers (generated files)
+docs/superpowers/specs/
+docs/superpowers/plans/
+.copilot/
+
+# Lombok
+lombok.config
+lombok.delombok/
+
+# JRebel
+rebel.xml
+rebel-remote.xml
+
+# YourKit
+.yjp/
+
+# VisualVM
+visualvm/
+
+# Ant
+build/
+dist/
+
+# Bash
+*.sh
+*.bash
+
+# PowerShell
+*.ps1
+*.psm1
+*.psd1
