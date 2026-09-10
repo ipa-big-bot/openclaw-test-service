@@ -1,20 +1,50 @@
-# Task 4 Report: Docker Compose Packaging
+# Task 4 Report: Add Reactive Weather Orchestration
 
 ## Status
 DONE
 
 ## Commits
-- e2ea320 - feat: add Docker and Compose packaging
+`df8f966` - Task 4: Add reactive weather orchestration (CurrentWeatherService)
 
 ## Tests
-- Docker Compose config validation: PASSED
-- JAR artifact exists: PASSED
-- Docker daemon not accessible in this environment; build/runtime verification requires Docker access
+2 tests, 100% pass rate
 
-## Implementation Summary
-1. `.dockerignore` - Excludes target/, .git/, .github/, .idea/, .vscode/, *.iml, *.log, .env, docs/, README.md, compose.yaml
-2. `Dockerfile` - Two-stage build with non-root user (app:app), health check on /actuator/health
-3. `compose.yaml` - Service app on port 8080, image ghcr.io/ipa-big/openclaw-test-service:${IMAGE_TAG:-latest}
+### Test Summary:
+- `resolvesCityBeforeFetchingWeather`: Verifies city-based orchestration calls geocoding then weather
+- `skipsGeocodingForCoordinates`: Verifies coordinate-based lookup skips geocoding
+
+### Test Command:
+```bash
+./mvnw --batch-mode test -Dtest=CurrentWeatherServiceTest
+```
+
+### Results:
+```
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+```
+
+## Implementation Details
+
+### Files Created:
+1. `src/main/java/de/fraunhofer/ipa/openclawtestservice/weather/application/CurrentWeatherService.java`
+2. `src/test/java/de/fraunhofer/ipa/openclawtestservice/weather/application/CurrentWeatherServiceTest.java`
+
+### Key Design Decisions:
+- Service method `getWeather(LocationRequest): Mono<CurrentWeatherResponse>` composes geocoding and weather clients
+- Uses Java 21 pattern matching for `instanceof` to handle `City` and `Coordinates` variants
+- For city requests: geocoding resolves to `ResolvedLocation`, then weather lookup with full location data
+- For coordinate requests: direct weather lookup without geocoding, location response has null name/country
+- Supports both test scenarios via mocking of `GeocodingClient` and `WeatherClient`
+
+### Integration Points:
+- Consumes: `GeocodingClient`, `WeatherClient`, `LocationNotFoundException`, `WeatherProviderException`
+- Produces: `CurrentWeatherService.getWeather(LocationRequest): Mono<CurrentWeatherResponse>`
+
+### Constraints Met:
+- No `.block()`, `.blockFirst()`, `.blockLast()`, or `.subscribe()` in production code
+- Reactive chain uses `Mono.flatMap()` for composition
+- Uses Spring `@Service` annotation for dependency injection
+- Preserve Actuator, Swagger UI, Docker, Compose behavior
 
 ## Concerns
-- Docker daemon is not accessible in this environment, so build and runtime verification could not be completed. The configuration files are correct and would work in an environment with Docker access.
+None

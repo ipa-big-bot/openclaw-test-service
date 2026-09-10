@@ -1,4 +1,4 @@
-You are implementing Task 4 from the Spring Boot Service Scaffold plan at `docs/superpowers/plans/2026-09-10-spring-boot-service-scaffold.md`.
+You are implementing Task 4 from the Current Weather Endpoint plan at `docs/superpowers/plans/2026-09-10-current-weather-endpoint.md`.
 
 Read this first — it is your requirements, with the exact values to use verbatim:
 Task brief: /home/openclaw/openclaw-test-service/.superpowers/sdd/task-4-brief.md
@@ -6,28 +6,17 @@ Report file: /home/openclaw/openclaw-test-service/.superpowers/sdd/task-4-report
 
 ## Your Task
 
-Package and Run the Service with Docker Compose.
+Add Reactive Weather Orchestration for the Current Weather Endpoint.
 
 ### Files to Create:
-1. `.dockerignore` - Docker build context exclusions
-2. `Dockerfile` - Two-stage non-root image
-3. `compose.yaml` - Docker Compose configuration
-
-### Key Requirements:
-- Run the container as non-root user `app:app` on port 8080
-- Build Linux AMD64 images only
-- Include health check using `/actuator/health`
-- Use image reference `ghcr.io/ipa-big/openclaw-test-service:${IMAGE_TAG:-latest}`
+1. `CurrentWeatherService.java` - Reactive orchestration
+2. `CurrentWeatherServiceTest.java` - Tests
 
 ### Your Work:
-1. Read the task brief at `/home/openclaw/openclaw-test-service/.superpowers/sdd/task-4-brief.md` - this is your exact requirement source
+1. Read the task brief at `/home/openclaw/openclaw-test-service/.superpowers/sdd/task-4-brief.md`
 2. Implement all required files
-3. Verify with Docker Compose
-4. Write your report to `/home/openclaw/openclaw-test-service/.superpowers/sdd/task-4-report.md` with:
-   - Status: DONE, DONE_WITH_CONCERNS, NEEDS_CONTEXT, or BLOCKED
-   - Commits: git commit hashes
-   - Tests: test count and pass rate
-   - Concerns: any issues
+3. Run tests with `./mvnw --batch-mode test -Dtest=CurrentWeatherServiceTest`
+4. Write your report to `/home/openclaw/openclaw-test-service/.superpowers/sdd/task-4-report.md`
 5. Commit your work
 
 DO NOT dispatch subagents. Report only status, commits, test summary, and concerns.
