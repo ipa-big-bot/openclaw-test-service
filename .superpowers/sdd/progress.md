@@ -1,87 +1,73 @@
-# SDD ledger — plan: docs/superpowers/plans/2026-09-10-spring-boot-service-scaffold.md
+# SDD ledger — plan: docs/superpowers/plans/2026-09-10-current-weather-endpoint.md
 
-## Task 1: Create the Maven Application Foundation
+## Task 1: Add Weather Domain Models and WMO Descriptions
 
 **Status:** DONE
 **Report:** task-1-report.md
-**Commits:** `b6fd9b2` - feat: initialize Spring Boot service
+**Commits:** `94556e7` - feat: add current weather domain models
 
 ### Completed Steps:
-1. Created pom.xml with Spring Boot 4.1.1, Java 21, Maven coords de.fraunhofer.ipa:openclaw-test-service
-2. Generated .mvn/wrapper/maven-wrapper.properties (Maven 3.9.16)
-3. Generated .mvn/wrapper/maven-wrapper.jar
-4. Generated mvnw (Unix) and mvnw.cmd (Windows)
-5. Created .gitignore
-6. Created OpenclawTestServiceApplicationTests.java
-7. Created OpenclawTestServiceApplication.java
-8. All tests pass (1/1, 100%)
+1. Created LocationRequest.java (sealed input interface)
+2. Created WeatherCodeDescriptions.java (WMO code mapping)
+3. Created ResolvedLocation.java (internal location model)
+4. Created ProviderCurrentWeather.java (provider weather model)
+5. Created LocationResponse.java (public location response)
+6. Created CurrentWeatherResponse.java (public weather response)
+7. Created WeatherCodeDescriptionsTest.java (29 WMO test cases)
+8. All tests pass (29/29, 100%)
 
 ### Verification:
-- Tests: 1/1 passing (100%)
+- Tests: 29/29 passing (100%)
 - Build: SUCCESS
 
 ---
 
-## Task 2: Expose and Verify Actuator Health
+## Task 2: Configure WebClient and Implement Geocoding
 
 **Status:** DONE
 **Report:** task-2-report.md
-**Commits:** `07a18e0` - feat: add actuator health endpoint
+**Commits:** `65fb4b1` - feat: add Open-Meteo geocoding client with WebClient
 
 ### Completed Steps:
-1. Added `spring-boot-starter-actuator` dependency to pom.xml
-2. Created `src/main/resources/application.yml` with Actuator configuration
-3. Created `src/test/java/de/fraunhofer/ipa/openclawtestservice/HealthEndpointIT.java`
-4. All tests pass (1/1, 100%)
+1. Added WebClient, WebFlux test support, MockWebServer 4.12.0 to pom.xml
+2. Added Open-Meteo URLs and timeouts to application.yml
+3. Created LocationNotFoundException, WeatherProviderException, WeatherProviderTimeoutException
+4. Created GeocodingClient interface
+5. Created OpenMeteoProperties and OpenMeteoClientConfiguration
+6. Implemented OpenMeteoGeocodingClient
+7. Created OpenMeteoGeocodingClientTest with 6 tests
+8. All tests pass (6/6, 100%)
 
 ### Verification:
-- Tests: 1/1 passing (100%)
+- Tests: 6/6 passing (100%)
 - Build: SUCCESS
+- No live Open-Meteo API calls (MockWebServer)
 
 ---
 
-## Task 3: Add and Verify OpenAPI Documentation
+## Task 3: Implement Current-Weather Provider Client
 
-**Status:** DONE
-**Report:** task-3-report.md
-**Commits:** `e6ebb24` - feat: add OpenAPI documentation
+**Status:** PENDING
+**Report:** task-3-report.md (pending)
+**Commits:** pending
 
-### Completed Steps:
-1. Modified pom.xml - added Springdoc dependency
-2. Created `OpenApiConfiguration.java` - configures OpenAPI metadata
-3. Created `OpenApiEndpointIT.java` - integration tests
-4. All tests pass (3/3, 100%)
-
-### Verification:
-- Tests: 3/3 passing (100%)
-- Build: SUCCESS
-- `/v3/api-docs` exposed
-- `/swagger-ui/index.html` accessible
+### Implementation:
+- Will dispatch after Task 2 review completes
 
 ---
 
-## Task 4: Package and Run the Service with Docker Compose
+## Task 4: Add Reactive Weather Orchestration
 
-**Status:** DONE
-**Report:** task-4-report.md
-**Commits:** `e2ea320` - feat: add Docker and Compose packaging
+**Status:** PENDING
+**Report:** task-4-report.md (pending)
+**Commits:** pending
 
-### Completed Steps:
-1. Created `.dockerignore` - Docker build context exclusions
-2. Created `Dockerfile` - Two-stage non-root image
-3. Created `compose.yaml` - Docker Compose configuration
-4. `docker compose config` validation passed
-
-### Verification:
-- Build: SUCCESS
-- Image reference: `ghcr.io/ipa-big/openclaw-test-service:latest`
-- Port: 8080
-- User: `app:app`
-- Health check: `/actuator/health`
+### Implementation:
+- Will dispatch after Task 3 review completes
 
 ---
 
-## Task 5: Add GitHub Actions Verification and GHCR Publication
+## Task 5: Expose the Endpoint and ProblemDetail Contract
 
 **Status:** PENDING
 **Report:** task-5-report.md (pending)
@@ -100,22 +86,3 @@
 
 ### Implementation:
 - Will dispatch after Task 5 review completes
-
----
-
-## Implementation Complete
-
-Tasks 1-4 are complete and committed.
-
-**Total Commits:**
-- b6fd9b2 - feat: initialize Spring Boot service
-- 07a18e0 - feat: add actuator health endpoint
-- e6ebb24 - feat: add OpenAPI documentation
-- e2ea320 - feat: add Docker and Compose packaging
-- b2fd5cf - docs: add SDD workspace and task briefs for Tasks 1-4
-- 295ebdf - docs: add task 4 report
-
-**Total Tests:** 5/5 passing (100%)
-- Task 1: 1 test
-- Task 2: 1 test
-- Task 3: 3 tests
