@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: de.fraunhofer.ipa.openclawtestservice.weather.provider.openmeteo.OpenMeteoWeatherClientTest
--------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.174 s -- in de.fraunhofer.ipa.openclawtestservice.weather.provider.openmeteo.OpenMeteoWeatherClientTest

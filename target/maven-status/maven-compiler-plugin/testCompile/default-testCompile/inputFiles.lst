@@ -1,6 +1,0 @@
-/home/openclaw/openclaw-test-service/src/test/java/de/fraunhofer/ipa/openclawtestservice/HealthEndpointIT.java
-/home/openclaw/openclaw-test-service/src/test/java/de/fraunhofer/ipa/openclawtestservice/OpenApiEndpointIT.java
-/home/openclaw/openclaw-test-service/src/test/java/de/fraunhofer/ipa/openclawtestservice/OpenclawTestServiceApplicationTests.java
-/home/openclaw/openclaw-test-service/src/test/java/de/fraunhofer/ipa/openclawtestservice/weather/application/WeatherCodeDescriptionsTest.java
-/home/openclaw/openclaw-test-service/src/test/java/de/fraunhofer/ipa/openclawtestservice/weather/provider/openmeteo/OpenMeteoGeocodingClientTest.java
-/home/openclaw/openclaw-test-service/src/test/java/de/fraunhofer/ipa/openclawtestservice/weather/provider/openmeteo/OpenMeteoWeatherClientTest.java
