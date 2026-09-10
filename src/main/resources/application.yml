@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: openclaw-test-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: Spring Boot web-service foundation
