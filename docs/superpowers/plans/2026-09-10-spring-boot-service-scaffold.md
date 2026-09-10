@@ -579,7 +579,6 @@ WORKDIR /workspace
 
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
-RUN ./mvnw --batch-mode dependency:go-offline
 
 COPY src/ src/
 RUN ./mvnw --batch-mode package -DskipTests
