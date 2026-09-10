@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -163,6 +164,7 @@ class CurrentWeatherEndpointIT {
     static class WebFluxTestConfiguration {
 
         @Bean
+        @Primary
         WebClient.Builder webClientBuilder() {
             return WebClient.builder();
         }

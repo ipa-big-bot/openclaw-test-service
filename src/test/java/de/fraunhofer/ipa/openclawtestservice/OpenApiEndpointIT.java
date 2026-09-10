@@ -2,6 +2,8 @@ package de.fraunhofer.ipa.openclawtestservice;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -17,11 +19,13 @@ class OpenApiEndpointIT {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @LocalServerPort
     private int port;
 
     @Test
-    void openApiDocumentContainsMetadataAndNoBusinessPaths()
+    void openApiDocumentContainsMetadataAndWeatherPath()
             throws IOException, InterruptedException {
         HttpResponse<String> response = get("/v3/api-docs");
 
@@ -29,25 +33,28 @@ class OpenApiEndpointIT {
         assertThat(response.body())
                 .contains("\"openapi\":")
                 .contains("\"title\":\"OpenClaw Test Service API\"")
-                .contains("\"version\":\"v1\"")
-                .contains("\"paths\":{}");
+                .contains("\"version\":\"v1\"");
+
+        assertThat(response.body()).doesNotContain("/api/v1/weather/current");
     }
 
     @Test
-    void swaggerUiIsAccessible() throws IOException, InterruptedException {
-        HttpResponse<String> response = get("/swagger-ui/index.html");
+    void openApiDocumentContainsWeatherEndpointDocumentation()
+            throws IOException, InterruptedException {
+        HttpResponse<String> response = get("/v3/api-docs");
 
         assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.body()).containsIgnoringCase("swagger");
+
+        JsonNode json = objectMapper.readTree(response.body());
+        JsonNode paths = json.get("paths");
+
+        assertThat(paths).isNotNull();
+        assertThat(paths.has("/api/v1/weather/current")).isTrue();
     }
 
-    private HttpResponse<String> get(String path)
-            throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:" + port + path))
-                .GET()
-                .build();
-
+    private HttpResponse<String> get(String path) throws IOException, InterruptedException {
+        URI uri = URI.create("http://localhost:" + port + path);
+        HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
         return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     }
 }
