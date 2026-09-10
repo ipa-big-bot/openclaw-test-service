@@ -1,0 +1,18 @@
+services:
+  app:
+    image: ghcr.io/ipa-big/openclaw-test-service:${IMAGE_TAG:-latest}
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          wget -q -O - http://localhost:8080/actuator/health
+          | grep -q '"status":"UP"'
+      interval: 10s
+      timeout: 3s
+      start_period: 20s
+      retries: 3
