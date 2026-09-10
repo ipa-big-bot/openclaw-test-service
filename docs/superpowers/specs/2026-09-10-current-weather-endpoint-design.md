@@ -110,7 +110,8 @@ geocoding is not performed, so `location.name` and `location.country` are
 weather observation.
 
 `observedAt` is an ISO 8601 offset date-time constructed from the observation
-time in the timezone returned by Open-Meteo.
+time and `utc_offset_seconds` returned by Open-Meteo. The IANA identifier from
+Open-Meteo's `timezone` field is returned in `location.timezone`.
 
 ## Architecture and Components
 
@@ -144,8 +145,8 @@ tests do not need HTTP.
 ### Open-Meteo Geocoding Client
 
 `OpenMeteoGeocodingClient` calls the Open-Meteo geocoding API using a dedicated
-`WebClient`. It URL-encodes the city and requests one result. The first returned
-result supplies:
+`WebClient`. It sends `GET /v1/search` with the URL-encoded city as `name`,
+`count=1`, `language=en`, and `format=json`. The first returned result supplies:
 
 - Resolved name
 - Country
@@ -159,16 +160,13 @@ An empty results list maps to the service's city-not-found error.
 
 `OpenMeteoWeatherClient` calls the Open-Meteo forecast API with:
 
-- Latitude and longitude
+- `GET /v1/forecast`
+- `latitude` and `longitude`
 - `timezone=auto`
-- Current temperature
-- Apparent temperature
-- Relative humidity
-- Precipitation
-- Weather code
-- Wind speed
-- Wind direction
-- Explicit metric units
+- `current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m`
+- `temperature_unit=celsius`
+- `wind_speed_unit=kmh`
+- `precipitation_unit=mm`
 
 It maps provider JSON into an internal current-weather model. Provider DTOs are
 not returned from the controller.
@@ -186,9 +184,19 @@ Typed properties under `weather.open-meteo` define:
 - Connection timeout
 - Response timeout
 
-Production defaults target Open-Meteo. Tests replace both URLs with local mock
-HTTP server addresses. Reactor Netty enforces finite connection and response
-timeouts.
+Production defaults are:
+
+```yaml
+weather:
+  open-meteo:
+    geocoding-base-url: https://geocoding-api.open-meteo.com
+    forecast-base-url: https://api.open-meteo.com
+    connect-timeout: 2s
+    response-timeout: 5s
+```
+
+Tests replace both URLs with local mock HTTP server addresses. Reactor Netty
+enforces the two-second connection timeout and five-second response timeout.
 
 ## Data Flow
 
@@ -246,12 +254,12 @@ Errors use Spring `ProblemDetail` and media type `application/problem+json`.
 Each response contains a stable problem `type`, HTTP `status`, human-readable
 `title` and `detail`, and the request path as `instance`.
 
-| Status | Condition |
-|---|---|
-| `400 Bad Request` | Missing, partial, non-numeric, blank-only, or out-of-range location input |
-| `404 Not Found` | Open-Meteo geocoding returns no result for the city |
-| `502 Bad Gateway` | Open-Meteo returns an error response, malformed JSON, or incomplete current conditions |
-| `504 Gateway Timeout` | Connection or response timeout occurs while calling Open-Meteo |
+| Status | Problem type | Condition |
+|---|---|---|
+| `400 Bad Request` | `urn:openclaw:error:invalid-location` | Missing, partial, non-numeric, blank-only, or out-of-range location input |
+| `404 Not Found` | `urn:openclaw:error:location-not-found` | Open-Meteo geocoding returns no result for the city |
+| `502 Bad Gateway` | `urn:openclaw:error:weather-provider-failure` | Open-Meteo returns an error response, malformed JSON, or incomplete current conditions |
+| `504 Gateway Timeout` | `urn:openclaw:error:weather-provider-timeout` | Connection or response timeout occurs while calling Open-Meteo |
 
 The endpoint does not retry, cache, return stale data, or fabricate successful
 fallback responses. Unexpected local failures retain the framework's standard
@@ -311,6 +319,7 @@ Local mock HTTP servers verify:
 
 - Exact geocoding path and query parameters
 - Exact forecast path, current-field selection, timezone, and metric units
+- Observation offset construction from `utc_offset_seconds`
 - Successful provider response mapping
 - Empty geocoding results
 - Provider error statuses
